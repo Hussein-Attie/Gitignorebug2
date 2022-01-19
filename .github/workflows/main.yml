@@ -1,0 +1,113 @@
+name: Build and Upload to cloud  
+
+on:
+  pull_request: {}
+  push: { branches: [master] }
+ 
+env:
+  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+ 
+jobs:
+
+  BuildWindows:
+    name: Build and Upload the Project for Windows  
+    runs-on: ubuntu-latest
+   
+        
+    steps:
+     
+      # Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+     
+      # Cache
+      - uses: actions/cache@v1.1.0
+        with:
+          path: Library
+          key: Library
+ 
+      # Test
+      - name: Run tests
+        uses: webbertakken/unity-test-runner@v1.3
+        with: 
+          
+          unityVersion: 2019.3.9f1
+ 
+      # Build for win
+      - name: Build project for windows
+        uses: webbertakken/unity-builder@v0.10
+        with:
+          
+           buildName: InteractiveWriting-Windows v${{ github.run_number }}
+           unityVersion: 2019.3.9f1
+           targetPlatform : 
+            StandaloneWindows64
+
+         
+      # Output for win
+      - uses: actions/upload-artifact@v1
+        with:
+          name: WinBuiltProject
+          path: build
+
+      # Upload the build to Google Drive    
+      - name: Upload Win build to Google Drive
+        uses: Jodebu/upload-to-drive@master
+        with:
+           target: build     
+           name: InteractiveWriting-Win v${{ github.run_number }}
+           credentials: ${{ secrets.CREDENTIALS }}
+           folder: ${{ secrets.DRIVE_FOLDER_ID }}
+      
+  BuildMacOS:
+     name: Build and Upload the Project for
+     runs-on: ubuntu-latest
+   
+        
+     steps:
+     
+      # Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+     
+      # Cache
+      - uses: actions/cache@v1.1.0
+        with:
+          path: Library
+          key: Library
+ 
+      # Test
+      - name: Run tests
+        uses: webbertakken/unity-test-runner@v1.3
+        with:
+          unityVersion: 2019.3.9f1
+ 
+      # Build for Mac
+      - name: Build project for MacOS
+        uses: webbertakken/unity-builder@v0.10
+        with:
+
+           buildName: InteractiveWriting-Mac 
+           unityVersion: 2019.3.9f1
+           targetPlatform : 
+              StandaloneOSX 
+       
+ 
+      # Output for Mac
+      - uses: actions/upload-artifact@v1
+        with:
+          name: MacBuiltProject
+          path: build
+
+       # Upload the build to Google Drive   
+      - name: Upload Mac build to Google Drive
+        uses: Jodebu/upload-to-drive@master
+        with:
+           target: build     
+           name: InteractiveWriting-Mac v${{ github.run_number }}
+           credentials: ${{ secrets.CREDENTIALS }}
+           folder: ${{ secrets.DRIVE_FOLDER_ID }}
