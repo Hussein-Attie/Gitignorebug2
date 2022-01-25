@@ -33,7 +33,7 @@ jobs:
         uses: webbertakken/unity-test-runner@v1.3
         with: 
           
-          unityVersion: 2019.3.9f1
+          unityVersion: 2020.3.25f1
  
       # Build for win
       - name: Build project for windows
@@ -41,7 +41,7 @@ jobs:
         with:
           
            buildName: InteractiveWriting-Windows v${{ github.run_number }}
-           unityVersion: 2019.3.9f1
+           unityVersion: 20020.3.25f1
            targetPlatform : 
             StandaloneWindows64
 
@@ -84,7 +84,7 @@ jobs:
       - name: Run tests
         uses: webbertakken/unity-test-runner@v1.3
         with:
-          unityVersion: 2019.3.9f1
+          unityVersion: 2020.3.25f1
  
       # Build for Mac
       - name: Build project for MacOS
@@ -92,7 +92,7 @@ jobs:
         with:
 
            buildName: InteractiveWriting-Mac 
-           unityVersion: 2019.3.9f1
+           unityVersion: 2020.3.25f1
            targetPlatform : 
               StandaloneOSX 
        
